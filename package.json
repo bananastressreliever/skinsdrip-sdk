@@ -1,6 +1,6 @@
 {
   "name": "@bananastressreliever/skinsdrip-sdk",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "Skinsdrip SDK",
   "main": "index.js",
   "type": "module",
