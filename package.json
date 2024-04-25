@@ -1,0 +1,19 @@
+{
+  "name": "skinsdrip-sdk",
+  "version": "1.0.0",
+  "description": "Skinsdrip SDK",
+  "main": "index.js",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bananastressreliever/skinsdrip-sdk.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "BroderTheDon",
+  "license": "ISC"
+}
