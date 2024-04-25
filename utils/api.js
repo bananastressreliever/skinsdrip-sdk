@@ -5,6 +5,7 @@ const baseUrl = "https://api.skinsdrip.com/merchant"
 
 let merchantId = '';
 let merchantSecret = '';
+let cookie = '';
 
 /**
  * Sets the authentication credentials for the merchant.
@@ -22,6 +23,10 @@ const setAuthCredentials = (merchant, secret) => {
     merchantSecret = secret;
 }
 
+const setCookie = (token) => {
+    cookie = token;
+}
+
 /**
  * Makes an API call with the specified parameters.
  *
@@ -37,7 +42,7 @@ const makeCall = async (type, url, data) => {
     if (!merchantId) throw new Error("Merchant ID is required");
     if (!merchantSecret) throw new Error("Merchant Secret is required");
 
-    const signature = utils.createSignature(data, merchantSecret);
+    const signature = utils.createSignature((data || {}), merchantSecret);
 
     const config = {
         method: type,
@@ -45,7 +50,8 @@ const makeCall = async (type, url, data) => {
         url: baseUrl + url,
         headers: {
             'merchant-id': merchantId,
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Cookie': `auth=${cookie}`
         },
         data: JSON.stringify({
             ...data,
@@ -54,11 +60,14 @@ const makeCall = async (type, url, data) => {
     };
 
     const res = await axios.request(config);
+    if (res.data.error) throw { ...res?.data };
 
-    if (res.data.error) return res.data;
+    return res.data
+
 }
 
 export default {
     makeCall,
-    setAuthCredentials
+    setAuthCredentials,
+    setCookie
 }

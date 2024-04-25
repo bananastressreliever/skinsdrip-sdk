@@ -1,8 +1,12 @@
 import { WebSocket } from 'ws'
-import EventEmitter from 'events'
+import EventEmitter from "eventemitter2"
 
 export default class WS extends EventEmitter {
     constructor(cookie) {
+
+        super({
+            wildcard: true
+        })
 
         this.baseUrl = "wss://api.skinsdrip.com"
         this.cookie = cookie
@@ -40,18 +44,15 @@ export default class WS extends EventEmitter {
                 this.isConnected = true;
             });
 
-            this.ws.on('message', (data) => {
+            this.ws.on('message', (buffer) => {
 
-                console.log(data, "websocket data")
+                const dataStr = buffer?.toString(); // Convert buffer to string
+                const data = JSON.parse(dataStr || {});
 
                 const event = data?.event;
 
-                if (!event.includes("merchant")) return;
+                if (event.includes("merchant")) data.event = event?.split(':')?.[1];;
 
-                // splice merchant from the event
-                data.event = event?.split(':')?.[1];
-
-                // Emit the event
                 this.emit(data.event, data);
             });
 

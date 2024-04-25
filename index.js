@@ -1,5 +1,5 @@
-import api from "./utils/api"
-import WS from "./utils/ws"
+import api from "./utils/api.js"
+import WS from "./utils/ws.js"
 
 /**
  * Represents the SKINSDRIP SDK.
@@ -37,10 +37,10 @@ export default class SKINSDRIP_SDK {
 
         try {
             const cookieRes = await api.makeCall('POST', '/authenticate', {})
+            const cookie = cookieRes?.data?.token;
 
-            console.log(cookieRes)
-
-            this.cookie = cookieRes?.data?.token
+            this.cookie = cookie
+            api.setCookie(cookie)
 
             return {
                 msg: "Authenticated successfully",
@@ -84,6 +84,18 @@ export default class SKINSDRIP_SDK {
     // Merchant methods
 
     /**
+     * Retrieves the pay session for a given user.
+     *
+     * @param {string} user_id - The ID of the user.
+     * @returns {Promise<Object>} - A promise that resolves to the pay session object.
+     */
+    getPaySession = async (user_id) => {
+        this.#checkAuthentication()
+
+        return await api.makeCall('POST', '/get_session', { user_id })
+    }
+
+    /**
      * Retrieves the market data.
      * @returns {Promise} A promise that resolves with the market data.
      */
@@ -109,7 +121,7 @@ export default class SKINSDRIP_SDK {
 
         this.#checkAuthentication()
 
-        return await api.makeCall('GET', '/inventory', { steamid })
+        return await api.makeCall('GET', '/inventory', { user_id: steamid })
     }
 
     /**
@@ -120,7 +132,7 @@ export default class SKINSDRIP_SDK {
 
         this.#checkAuthentication()
 
-        return await api.makeCall('POST', '/inventory/refresh', { steamid })
+        return await api.makeCall('POST', '/inventory/refresh', { user_id: steamid })
     }
 
     /**
@@ -150,10 +162,12 @@ export default class SKINSDRIP_SDK {
         if (!tradeurl) throw new Error("Tradeurl is required")
 
         const tradeData = {
-            userItems,
+            user: {
+                items: userItems,
+                steamid,
+                tradeurl
+            },
             botItems,
-            userSteamid: steamid,
-            userTradeurl: tradeurl,
         }
 
         return await api.makeCall('POST', '/trading', { ...tradeData })
