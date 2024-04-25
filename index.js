@@ -152,8 +152,8 @@ export default class SKINSDRIP_SDK {
         const tradeData = {
             userItems,
             botItems,
-            userSteamid : steamid,
-            userTradeurl : tradeurl,
+            userSteamid: steamid,
+            userTradeurl: tradeurl,
         }
 
         return await api.makeCall('POST', '/trading', { ...tradeData })

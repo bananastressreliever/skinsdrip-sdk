@@ -27,7 +27,7 @@ export default class WS extends EventEmitter {
     subscribe = () => {
         const connect = () => {
 
-            if (!this.isConnected) {
+            if (!this.isConnected || !this.ws) {
                 this.ws = new WebSocket(this.baseUrl, {
                     headers: {
                         'Cookie': `auth=${this.cookie}`
@@ -41,12 +41,15 @@ export default class WS extends EventEmitter {
             });
 
             this.ws.on('message', (data) => {
+
+                console.log(data, "websocket data")
+
                 const event = data?.event;
 
                 if (!event.includes("merchant")) return;
 
                 // splice merchant from the event
-                data.event = event.split(':')[1];
+                data.event = event?.split(':')?.[1];
 
                 // Emit the event
                 this.emit(data.event, data);
