@@ -13,7 +13,8 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel . --out-dir dist --ignore node_modules"
+    "build": "babel . --out-dir dist --ignore node_modules",
+    "push": "npm run build && npm version minor && npm publish"
   },
   "author": "BroderTheDon",
   "license": "ISC",

@@ -33,7 +33,7 @@ export default class SKINSDRIP_SDK {
      * Authenticates the merchant by calling the API's authenticate method.
      * @returns {Promise<{msg: string} | {error: boolean, msg: string, data: any}>} A promise that resolves to an object with a success message or an error object.
      */
-    autenticate = async () => {
+    authenticate = async () => {
 
         try {
             const cookieRes = await api.makeCall('POST', '/authenticate', {})
