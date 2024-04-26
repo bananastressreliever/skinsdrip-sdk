@@ -58,6 +58,7 @@ export default class WS extends EventEmitter {
 
             this.ws.on('close', () => {
                 console.log('disconnected');
+                this.isConnected = false;
                 setTimeout(connect, 5000); // try to reconnect every 5 seconds
             });
         };
