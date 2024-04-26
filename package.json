@@ -3,8 +3,7 @@
   "version": "2.0.1",
   "description": "Skinsdrip SDK",
   "main": "dist/index.js",
-  "module": "src/index.js",
-  "type": "module",
+  "module": "./index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bananastressreliever/skinsdrip-sdk.git"
