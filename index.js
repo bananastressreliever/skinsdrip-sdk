@@ -1,5 +1,6 @@
 import api from "./utils/api.js"
 import WS from "./utils/ws.js"
+import utils from "./utils/utils.js"
 
 /**
  * Represents the SKINSDRIP SDK.
@@ -42,9 +43,7 @@ export default class SKINSDRIP_SDK {
             this.cookie = cookie
             api.setCookie(cookie)
 
-            return {
-                msg: "Authenticated successfully",
-            }
+            return "Authenticated successfully"
 
         } catch (error) {
             return {
@@ -172,5 +171,20 @@ export default class SKINSDRIP_SDK {
 
         return await api.makeCall('POST', '/trading', { ...tradeData })
     }
+
+}
+
+/**
+ * Verifies the IPN (Instant Payment Notification) by comparing the provided signature with the calculated signature.
+ * @param {Object} data - The IPN data object.
+ * @param {string} secret - The secret key used for calculating the signature.
+ * @returns {boolean} - Returns true if the provided signature matches the calculated signature, otherwise returns false.
+ */
+export const verifyIpn = (data, secret) => {
+
+    const signature = data?.signature;
+    const calculatedSignature = utils.createSignature(data, secret);
+
+    return signature === calculatedSignature;
 
 }
