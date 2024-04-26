@@ -51,7 +51,7 @@ export default class WS extends EventEmitter {
 
                 const event = data?.event;
 
-                if (event.includes("merchant")) data.event = event?.split(':')?.[1];;
+                if (event?.includes("merchant")) data.event = event?.split('merchant:')?.[1];
 
                 this.emit(data.event, data);
             });
