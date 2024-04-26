@@ -2,7 +2,8 @@
   "name": "@bananastressreliever/skinsdrip-sdk",
   "version": "2.0.0",
   "description": "Skinsdrip SDK",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "module": "src/index.js",
   "type": "module",
   "repository": {
     "type": "git",
@@ -12,7 +13,8 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "babel . --out-dir dist --ignore node_modules"
   },
   "author": "BroderTheDon",
   "license": "ISC",
@@ -20,5 +22,10 @@
     "axios": "^1.6.8",
     "eventemitter2": "^6.4.9",
     "ws": "^8.16.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.24.1",
+    "@babel/core": "^7.24.4",
+    "@babel/preset-env": "^7.24.4"
   }
 }
