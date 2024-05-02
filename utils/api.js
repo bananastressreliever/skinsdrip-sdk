@@ -59,10 +59,12 @@ const makeCall = async (type, url, data) => {
         })
     };
 
-    const res = await axios.request(config);
-    if (res.data.error) throw { ...res?.data };
-
-    return res.data
+    try {
+        const res = await axios.request(config);
+        return res.data;
+    } catch(error) {
+        throw error?.response?.data;
+    }
 
 }
 
