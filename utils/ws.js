@@ -31,6 +31,8 @@ export default class WS extends EventEmitter {
     subscribe = () => {
         const connect = () => {
 
+            console.log("Trying to connect to the Skinsdrip wss server...")
+
             if (!this.isConnected || !this.ws) {
                 this.ws = new WebSocket(this.baseUrl, {
                     headers: {
@@ -42,6 +44,13 @@ export default class WS extends EventEmitter {
             this.ws.on('open', () => {
                 console.log("Connected to the Skinsdrip wss server");
                 this.isConnected = true;
+
+                // Send a ping message every 7 seconds
+                setInterval(() => {
+                    if (this.ws && this.isConnected) {
+                        this.ws.send('ping');
+                    }
+                }, 7000);
             });
 
             this.ws.on('message', (buffer) => {
@@ -57,9 +66,9 @@ export default class WS extends EventEmitter {
             });
 
             this.ws.on('close', () => {
-                console.log('disconnected');
+                console.log('disconnected from the Skinsdrip wss server');
                 this.isConnected = false;
-                setTimeout(connect, 5000); // try to reconnect every 5 seconds
+                setTimeout(connect, 7500); // try to reconnect every 5 seconds
             });
         };
 
