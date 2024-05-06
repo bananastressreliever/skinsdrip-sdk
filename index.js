@@ -2,7 +2,7 @@ import api from "./utils/api.js";
 import WS from "./utils/ws.js";
 import utils from "./utils/utils.js";
 
-import functions from '@bananastressreliever/functions-package';
+const sleep = ms => new Promise(r => setTimeout(r, ms))
 
 import { pendingCallbacks } from "./utils/injector.js";
 
@@ -196,7 +196,7 @@ export default class SKINSDRIP_SDK {
   fetchOrders = async (orderIds) => {
 	for(const orderId of orderIds) {
 		this.#fetchPendingTrade(orderId);
-		await functions.sleep(5000);
+		await sleep(5000);
 	};
   }
 }
