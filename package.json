@@ -19,6 +19,7 @@
   "author": "BroderTheDon",
   "license": "ISC",
   "dependencies": {
+    "@bananastressreliever/functions-package": "^1.9.0",
     "axios": "^1.6.8",
     "eventemitter2": "^6.4.9",
     "ws": "^8.16.0"

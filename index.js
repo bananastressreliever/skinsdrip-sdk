@@ -2,7 +2,7 @@ import api from "./utils/api.js";
 import WS from "./utils/ws.js";
 import utils from "./utils/utils.js";
 
-import functions from "@bananastressreliver/functions-package";
+import functions from '@bananastressreliever/functions-package';
 
 import { pendingCallbacks } from "./utils/injector.js";
 
