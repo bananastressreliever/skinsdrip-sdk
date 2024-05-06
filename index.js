@@ -193,7 +193,7 @@ export default class SKINSDRIP_SDK {
   };
 
 
-  fetchTrades = (orderIds) => {
+  fetchOrders = (orderIds) => {
 	for(const orderId of orderIds) {
 		this.#fetchPendingTrade(orderId);
 		functions.sleep(1000);
