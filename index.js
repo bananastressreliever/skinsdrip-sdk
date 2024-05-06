@@ -184,7 +184,7 @@ export default class SKINSDRIP_SDK {
 
   #fetchPendingTrade = async (orderId) => {
     try {
-      const pendingTrade = await api.makeCall("POST", "/trading/getOrder", {
+      const pendingTrade = await api.makeCall("GET", "/trading/getOrder", {
         orderId,
       });
 
