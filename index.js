@@ -188,7 +188,12 @@ export default class SKINSDRIP_SDK {
         orderId,
       });
 
-      this.ws.emit("trade:update", pendingTrade);
+	  console.log(pendingTrade);
+
+      this.ws.emit("trade:update", {
+		event: "trade:update",
+		data: pendingTrade?.data
+	  });
     } catch (error) {}
   };
 
