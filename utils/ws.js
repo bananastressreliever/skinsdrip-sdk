@@ -61,15 +61,16 @@ export default class WS extends EventEmitter {
                 const data = JSON.parse(dataStr || {});
 
                 const event = data?.event;
+                console.log("event", event);
 
                 if (event?.includes("merchant")) data.event = event?.split('merchant:')?.[1];
 
-                if (event.includes("trade:update")) {
+                if (event?.includes("trade:update")) {
 
                     const orderId = data.data.orderId;
                     removePendingCallback(orderId);
 
-                } // trade:update
+                } 
 
                 this.emit(data.event, data);
             });
