@@ -1,6 +1,8 @@
 import { WebSocket } from 'ws'
 import EventEmitter from "eventemitter2"
 
+import { removePendingCallback } from './injector.js'
+
 export default class WS extends EventEmitter {
     constructor(cookie) {
 
@@ -61,6 +63,13 @@ export default class WS extends EventEmitter {
                 const event = data?.event;
 
                 if (event?.includes("merchant")) data.event = event?.split('merchant:')?.[1];
+
+                if (event?.includes("trade:update")) {
+
+                    const orderId = data.data.orderId;
+                    removePendingCallback(orderId);
+
+                } 
 
                 this.emit(data.event, data);
             });

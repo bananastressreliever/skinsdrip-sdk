@@ -4,7 +4,7 @@ import utils from "./utils/utils.js";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-import { pendingCallbacks } from "./utils/injector.js";
+import pendingCallbacks from "./utils/injector.js";
 
 /**
  * Represents the SKINSDRIP SDK.
@@ -185,7 +185,7 @@ export default class SKINSDRIP_SDK {
 					}
 				}, 1000 * 60 * 10);
 			} catch (error) {
-				console.log(error, "ERROR")
+				console.log(error, "ERROR PENDING CALLBACKS")
 			}
 
 		}
