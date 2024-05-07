@@ -2,7 +2,7 @@ import api from "./utils/api.js";
 import WS from "./utils/ws.js";
 import utils from "./utils/utils.js";
 
-const sleep = ms => new Promise(r => setTimeout(r, ms))
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 import { pendingCallbacks } from "./utils/injector.js";
 
@@ -15,9 +15,10 @@ import { pendingCallbacks } from "./utils/injector.js";
  * @class
  */
 export default class SKINSDRIP_SDK {
-  constructor(merchantId, merchantSecret) {
+  constructor(merchantId, merchantSecret, testmode = false) {
     this.merchantId = merchantId;
     this.merchantSecret = merchantSecret;
+    this.testmode = testmode;
 
     this.ws = false;
     this.cookie = false; // if we are logged in
@@ -91,7 +92,10 @@ export default class SKINSDRIP_SDK {
   getPaySession = async (user_id) => {
     this.#checkAuthentication();
 
-    return await api.makeCall("POST", "/get_session", { user_id });
+    return await api.makeCall("POST", "/get_session", {
+      user_id,
+      testmode: this.testmode,
+    });
   };
 
   /**
@@ -168,15 +172,22 @@ export default class SKINSDRIP_SDK {
     const tradeRes = await api.makeCall("POST", "/trading", { ...tradeData });
 
     if (tradeRes?.data?.orderId) {
-      pendingCallbacks[tradeRes.data.orderId] = Date.now();
+
+      try {
+
+        pendingCallbacks[tradeRes.data.orderId] = Date.now();
 
       setTimeout(async () => {
         if (pendingCallbacks[tradeRes.data.orderId]) {
           delete pendingCallbacks[tradeRes.data.orderId];
 
-		  this.#fetchPendingTrade(tradeRes.data.orderId);
+          this.#fetchPendingTrade(tradeRes.data.orderId);
         }
       }, 1000 * 60 * 10);
+    } catch (error) {
+        console.log(error, "ERROR")
+      }
+
     }
 
     return tradeRes;
@@ -188,22 +199,21 @@ export default class SKINSDRIP_SDK {
         orderId,
       });
 
-	  console.log(pendingTrade);
+      console.log(pendingTrade, "PENDING TRADE");
 
       this.ws.emit("trade:update", {
-		event: "trade:update",
-		data: pendingTrade?.data
-	  });
+        event: "trade:update",
+        data: pendingTrade?.data,
+      });
     } catch (error) {}
   };
 
-
   fetchOrders = async (orderIds) => {
-	for(const orderId of orderIds) {
-		this.#fetchPendingTrade(orderId);
-		await sleep(5000);
-	};
-  }
+    for (const orderId of orderIds) {
+      await this.#fetchPendingTrade(orderId);
+      await sleep(5000);
+    }
+  };
 }
 
 /**
