@@ -66,10 +66,15 @@ export default class WS extends EventEmitter {
 
                 if (event?.includes("trade:update")) {
 
-                    const orderId = data.data.orderId;
-                    removePendingCallback(orderId);
+                    try {
+                        const orderId = data.data.orderId;
+                        removePendingCallback(orderId);
 
-                } 
+                    } catch (error) {
+                        console.log("ERROR remove pending callback", error)
+                    }
+
+                }
 
                 this.emit(data.event, data);
             });
