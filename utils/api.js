@@ -62,7 +62,7 @@ const makeCall = async (type, url, data) => {
     try {
         const res = await axios.request(config);
         return res.data;
-    } catch(error) {
+    } catch (error) {
         throw error?.response?.data;
     }
 
