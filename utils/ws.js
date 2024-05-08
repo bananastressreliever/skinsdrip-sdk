@@ -1,7 +1,7 @@
 import { WebSocket } from 'ws'
 import EventEmitter from "eventemitter2"
 
-import { removePendingCallback } from './injector.js'
+import injector from './injector.js'
 
 export default class WS extends EventEmitter {
     constructor(cookie) {
@@ -68,7 +68,7 @@ export default class WS extends EventEmitter {
 
                     try {
                         const orderId = data.data.orderId;
-                        removePendingCallback(orderId);
+                        injector.removePendingCallback(orderId);
 
                     } catch (error) {
                         console.log("ERROR remove pending callback", error)
@@ -82,7 +82,7 @@ export default class WS extends EventEmitter {
             this.ws.on('close', () => {
                 console.log('disconnected from the Skinsdrip wss server');
                 this.isConnected = false;
-                setTimeout(connect, 7500); // try to reconnect every 5 seconds
+                setTimeout(connect, 7500);
             });
         };
 

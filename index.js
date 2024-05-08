@@ -4,7 +4,7 @@ import utils from "./utils/utils.js";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
-import pendingCallbacks from "./utils/injector.js";
+import injector from "./utils/injector.js";
 
 /**
  * Represents the SKINSDRIP SDK.
@@ -175,11 +175,11 @@ export default class SKINSDRIP_SDK {
 
 			try {
 
-				pendingCallbacks[tradeRes.data.orderId] = Date.now();
+				injector.pendingCallbacks[tradeRes.data.orderId] = Date.now();
 
 				setTimeout(async () => {
-					if (pendingCallbacks[tradeRes.data.orderId]) {
-						delete pendingCallbacks[tradeRes.data.orderId];
+					if (injector.pendingCallbacks[tradeRes.data.orderId]) {
+						delete injector.pendingCallbacks[tradeRes.data.orderId];
 
 						this.#fetchPendingTrade(tradeRes.data.orderId);
 					}
