@@ -31,16 +31,24 @@ export default class WS extends EventEmitter {
      * Establishes a WebSocket connection and subscribes to events.
      */
     subscribe = () => {
-        const connect = () => {
+        const retryInterval = 7500;
+        const pingInterval = 7000;
 
-            console.log("Trying to connect to the Skinsdrip wss server...")
+        const connect = () => {
+            console.log("Trying to connect to the Skinsdrip wss server...");
 
             if (!this.isConnected || !this.ws) {
-                this.ws = new WebSocket(this.baseUrl, {
-                    headers: {
-                        'Cookie': `auth=${this.cookie}`
-                    }
-                });
+                try {
+                    this.ws = new WebSocket(this.baseUrl, {
+                        headers: {
+                            'Cookie': `auth=${this.cookie}`
+                        }
+                    });
+                } catch (error) {
+                    console.log("ERROR CONNECTING TO WS", error);
+                    setTimeout(connect, retryInterval);
+                    return;
+                }
             }
 
             this.ws.on('open', () => {
@@ -52,28 +60,30 @@ export default class WS extends EventEmitter {
                     if (this.ws && this.isConnected) {
                         this.ws.send('ping');
                     }
-                }, 7000);
+                }, pingInterval);
             });
 
             this.ws.on('message', (buffer) => {
-
                 const dataStr = buffer?.toString(); // Convert buffer to string
-                const data = JSON.parse(dataStr || {});
+                let data;
+                try {
+                    data = JSON.parse(dataStr || '{}');
+                } catch (error) {
+                    console.log("ERROR PARSING MESSAGE", error);
+                    return;
+                }
 
                 const event = data?.event;
 
                 if (event?.includes("merchant")) data.event = event?.split('merchant:')?.[1];
 
                 if (event?.includes("trade:update")) {
-
                     try {
                         const orderId = data.data.orderId;
                         injector.removePendingCallback(orderId);
-
                     } catch (error) {
-                        console.log("ERROR remove pending callback", error)
+                        console.log("ERROR remove pending callback", error);
                     }
-
                 }
 
                 this.emit(data.event, data);
@@ -82,7 +92,7 @@ export default class WS extends EventEmitter {
             this.ws.on('close', () => {
                 console.log('disconnected from the Skinsdrip wss server');
                 this.isConnected = false;
-                setTimeout(connect, 7500);
+                setTimeout(connect, retryInterval);
             });
         };
 
