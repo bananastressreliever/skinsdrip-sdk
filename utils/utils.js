@@ -11,7 +11,10 @@ const sha256 = (string) => {
  * @returns {string} - The generated signature.
  */
 const createSignature = (data, secret) => {
-    const signatureString = Object.keys(data).sort().reduce((acc, key) => {
+
+    if (!data || !secret) throw new Error("Data and secret are required");
+
+    const signatureString = Object.keys(data || {})?.sort()?.reduce((acc, key) => {
         if (key === "signature" || typeof data[key] === "object") return acc
         return acc + data[key];
     }, '');
