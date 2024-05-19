@@ -49,6 +49,7 @@ export default class SKINSDRIP_SDK {
 
 			return "Authenticated successfully";
 		} catch (error) {
+			console.log(error, "error in skinsdrip-sdk!");
 			return {
 				error: true,
 				msg: error,
