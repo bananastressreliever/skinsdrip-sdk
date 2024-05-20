@@ -3,7 +3,6 @@
   "version": "2.25.0",
   "description": "Skinsdrip SDK",
   "main": "dist/index.js",
-  "type": "module",
   "module": "./index.js",
   "repository": {
     "type": "git",
