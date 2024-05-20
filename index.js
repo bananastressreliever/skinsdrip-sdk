@@ -42,11 +42,14 @@ export default class SKINSDRIP_SDK {
 			const cookieRes = await api.makeCall("POST", "/authenticate", {});
 			const cookie = cookieRes?.data?.token;
 
+			console.log(cookieRes, cookie, "SETTINGS COOKIES", );
+
 			this.cookie = cookie;
 			api.setCookie(cookie);
 
 			return "Authenticated successfully";
 		} catch (error) {
+			console.log(error, "error in skinsdrip-sdk!");
 			return {
 				error: true,
 				msg: error,
@@ -55,6 +58,7 @@ export default class SKINSDRIP_SDK {
 	};
 
 	#checkAuthentication = () => {
+		console.log(this.cookie, "CHECK AUTHENTICATION");
 		if (!this.cookie)
 			throw new Error("User is not authenticated. Please authenticate first.");
 	};
