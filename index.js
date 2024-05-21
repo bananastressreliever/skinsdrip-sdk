@@ -59,8 +59,13 @@ export default class SKINSDRIP_SDK {
 
 	#checkAuthentication = () => {
 		console.log(this.cookie, "CHECK AUTHENTICATION");
-		if (!this.cookie)
+		if (!this.cookie) {
+
+			console.log("TRYING TO REGENERATE COOKIE FOR SKINSDRIP SDK")
+			this.authenticate();
+
 			throw new Error("User is not authenticated. Please authenticate first.");
+		}
 	};
 
 	/**
