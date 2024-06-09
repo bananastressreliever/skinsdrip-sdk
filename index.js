@@ -140,7 +140,7 @@ export default class SKINSDRIP_SDK {
 	refreshInventory = async (steamid) => {
 		this.#checkAuthentication();
 
-		return await api.makeCall("POST", "/inventory/refresh", {
+		return await api.makeCall("GET", "/inventory/refresh", {
 			user_id: steamid,
 		});
 	};
