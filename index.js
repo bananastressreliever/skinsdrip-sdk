@@ -165,7 +165,7 @@ export default class SKINSDRIP_SDK {
 	 * @returns {Promise} A promise that resolves with the trade data, including an orderId to track the trade.
 	 * @throws {Error} If steamid or tradeurl is not provided.
 	 */
-	createTrade = async (steamid, tradeurl, userItems, botItems) => {
+	createTrade = async (steamid, tradeurl, userItems, botItems, callback) => {
 		if (!steamid) throw new Error("Steamid is required");
 		if (!tradeurl) throw new Error("Tradeurl is required");
 
@@ -184,13 +184,15 @@ export default class SKINSDRIP_SDK {
 
 			try {
 
-				injector.pendingCallbacks[tradeRes.data.orderId] = Date.now();
+				injector.pendingCallbacks[tradeRes.data.orderId] = callback || Date.now();
 
 				setTimeout(async () => {
 					if (injector.pendingCallbacks[tradeRes.data.orderId]) {
-						delete injector.pendingCallbacks[tradeRes.data.orderId];
+						
 
-						this.#fetchPendingTrade(tradeRes.data.orderId);
+						this.#fetchPendingTrade(tradeRes.data.orderId, injector.pendingCallbacks[tradeRes.data.orderId]);
+
+						delete injector.pendingCallbacks[tradeRes.data.orderId];
 					}
 				}, 1000 * 60 * 10);
 			} catch (error) {
@@ -202,13 +204,15 @@ export default class SKINSDRIP_SDK {
 		return tradeRes;
 	};
 
-	#fetchPendingTrade = async (orderId) => {
+	#fetchPendingTrade = async (orderId, callback) => {
 		try {
 			const pendingTrade = await api.makeCall("GET", "/trading/getOrder", {
 				orderId,
 			});
 
 			console.log(pendingTrade, "PENDING TRADE");
+
+			if(typeof callback === "function") callback(pendingTrade?.data);
 
 			this.ws.emit("trade:update", {
 				event: "trade:update",
