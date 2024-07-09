@@ -27,10 +27,10 @@ The body of the request should be a JSON object containing the following fields:
 | signature  | string | The generated signature |
 
 ### Signature Generation
-To generate the signature, concatenate the values of all fields in the body in the order they are listed (in this case, just the `user_id`), and then append the `merchantSecret`. 
+To generate the signature, concatenate the values of all fields in the body in the order they are listed (in this case, just the `user_id`), then append the `merchantSecret`, and lastly hash the string using sha256. 
 
 Example:
-signature = user_id + merchantSecret
+signature = sha256(user_id + merchantSecret)
 
 ### Response
 The response will be a JSON object containing the following fields:
