@@ -5,6 +5,10 @@
 1. **Create a `.npmrc` file** in the same directory as your `package.json` file.  
    The contents of the `.npmrc` file should be as follows. Make sure to change `YOUR_PAT_TOKEN_HERE` to your actual key:
 
+**NOTE** PAT tokens are from Github 
+   - https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
+   - Make sure to give it full perms for packages
+
     ```text
     @bananastressreliever:registry=https://npm.pkg.github.com
     //npm.pkg.github.com/:_authToken=YOUR_PAT_TOKEN_HERE
@@ -100,7 +104,3 @@ After receiving and verifying the IPN call:
 2. **Credit the user associated with that `orderId`.**
 
     > **Important:** The same IPN calls can be sent more than once. It is recommended to add a `credited` status or similar to the database to handle this.
-
----
-
-This formatted documentation should help ensure clarity and ease of use for your service.
