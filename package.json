@@ -2,8 +2,13 @@
   "name": "@bananastressreliever/skinsdrip-sdk",
   "version": "2.31.0",
   "description": "Skinsdrip SDK",
+  "type": "module",
   "main": "dist/index.js",
   "module": "./index.js",
+  "exports": {
+    "import": "./index.js",
+    "require": "./dist/index.js"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/bananastressreliever/skinsdrip-sdk.git"
@@ -13,7 +18,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "babel . --out-dir dist --ignore node_modules,test.js",
+    "build": "babel . --out-dir dist --ignore node_modules,test.js --copy-files",
     "push": "npm run build && npm version minor && npm publish"
   },
   "author": "BroderTheDon",
@@ -25,8 +30,8 @@
     "ws": "^8.16.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.24.1",
-    "@babel/core": "^7.24.4",
-    "@babel/preset-env": "^7.24.4"
+    "@babel/cli": "^7.26.4",
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0"
   }
 }
