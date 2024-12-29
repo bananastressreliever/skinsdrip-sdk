@@ -3,12 +3,22 @@
   "version": "2.31.2",
   "description": "Skinsdrip SDK",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "./dist/index.js",
   "module": "./index.js",
   "exports": {
     ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "require": "./dist/index.js",
+      "default": "./index.js"
+    },
+    "./index.js": {
       "import": "./index.js",
       "require": "./dist/index.js"
+    },
+    "./utils/*": {
+      "import": "./utils/*.js",
+      "require": "./dist/utils/*.js"
     },
     "./package.json": "./package.json"
   },
